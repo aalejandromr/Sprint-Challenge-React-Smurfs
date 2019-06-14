@@ -13,12 +13,44 @@ class SmurfForm extends Component {
   addSmurf = event => {
     event.preventDefault();
     // add code to create the smurf using the api
+    // debugger;
+    this.props.handleAddSmurf({
+      name: this.state.name,
+      age: this.state.age,
+      height: this.state.height
+    });
 
     this.setState({
       name: '',
       age: '',
       height: ''
     });
+  }
+
+  updateSmurf = event => {
+    event.preventDefault();
+    // add code to create the smurf using the api
+    // debugger;
+    this.props.handleUpdateSmurf(this.props.handleEditSmurf.id, {
+      name: this.state.name,
+      age: this.state.age,
+      height: this.state.height
+    });
+
+    this.setState({
+      name: '',
+      age: '',
+      height: ''
+    });
+  }
+
+  componentWillMount()
+  {
+    if(this.props.editMode)
+    {
+      // this.setState(this.props.handleEditSmurf)
+      this.setState(this.props.handleEditSmurf);
+    }
   }
 
   handleInputChange = e => {
@@ -28,7 +60,7 @@ class SmurfForm extends Component {
   render() {
     return (
       <div className="SmurfForm">
-        <form onSubmit={this.addSmurf}>
+        <form onSubmit={(e) => this.props.editMode ? this.updateSmurf(e) : this.addSmurf(e)}>
           <input
             onChange={this.handleInputChange}
             placeholder="name"
@@ -47,7 +79,8 @@ class SmurfForm extends Component {
             value={this.state.height}
             name="height"
           />
-          <button type="submit">Add to the village</button>
+          { !this.props.editMode ? <button type="submit">Add to the village</button> : <button type="submit">Edit Smurf</button>}
+          
         </form>
       </div>
     );
